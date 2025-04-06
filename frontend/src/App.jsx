@@ -9,13 +9,13 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 function App() {
   const myRouter = createBrowserRouter([
     { path: '', element: <Signup /> },
-    { path: 'login', element: <Login /> },
-    { path: 'signup', element: <Signup /> },
-    { path: 'dashboard', element: <Dashboard /> },
-    { path: 'projects', element: <ProjectsComponent /> },
-    { path: 'projects/:projectId', element: <ProjectDetails /> },
-    { path: 'userDashboard', element: <UserDashboard /> },
-  ]);
+     { path: 'login', element: <Login /> },
+     { path: 'signup', element: <Signup /> },
+     { path: 'dashboard', element: <Dashboard /> },
+     { path: 'projects', element: <ProjectsComponent /> },
+     { path: 'projects/:projectId', element: <ProjectDetails /> },
+     { path: 'userDashboard', element: <UserDashboard /> },
+   ]);
 
   return (
     <>

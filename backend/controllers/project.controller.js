@@ -1,4 +1,5 @@
-const Project = require("../models/project.model");
+const Task = require("../models/task.model.js");
+const Project = require("../models/project.model.js");
 
 // Get all projects
 exports.getAllProjects = async (req, res) => {
@@ -11,16 +12,19 @@ exports.getAllProjects = async (req, res) => {
 };
 
 //Get a single project by ID
-/*exports.getProjectById = async (req, res) => {
-    
+exports.getProjectById = async (req, res) => {
+    // console.log(req);
+    // console.log("Hi:",req.params.id);
     try {
         const project = await Project.findById(req.params.id)
-            .populate('assignedUsers', 'fullname email');  // Populate assigned users with full names and emails
-            // .populate({
-            //     path: 'tasks',
-            //     populate: { path: 'assignedUser', select: 'fullname' } // Populate assignedUser inside tasks
-            // }); 
-
+            .populate('assignedUsers', 'fullname email') // Populate assigned users with full names and emails
+            .populate({
+                path: 'tasks',
+                populate: {
+                    path: 'assignedUsers',
+                    select: 'fullname'
+                }
+            });  
 
         if (!project) {
             return res.status(404).json({ message: 'Project not found' });
@@ -33,7 +37,7 @@ exports.getAllProjects = async (req, res) => {
         res.status(500).json({ message: 'Server error' });
     }
 };
-*/ 
+
 
 
 exports.getProjectById = async (req, res) => {

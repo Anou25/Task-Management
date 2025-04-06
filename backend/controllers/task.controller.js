@@ -1,7 +1,5 @@
-const Task = require("../models/task.model.js");
-
-const Project = require("../models/project.model.js");
-
+const Task = require("../models/task.model");
+const Project = require("../models/project.model");
 
 // Get all tasks
 exports.getAllTasks = async (req, res) => {
@@ -113,51 +111,39 @@ exports.getTaskById = async (req, res) => {
 exports.createTask = async (req, res) => { 
     conlog.log('yes',req.body());
     try {
-        const {
+        //console.log("Request body:", req.body); // Debugging
+        const { taskTitle, taskDescription, taskStatus, startDate, endDate, projectId, assignedUsers } = req.body;
+
+        const newTask = await Task.create({
             taskTitle,
             taskDescription,
-            taskStatus,
+            assignedUser,
             startDate,
             endDate,
-            projectId,
-            assignedUser
+            status,
+            id // This is projectId
         } = req.body;
 
-        // Validate project exists
-        const project = await Project.findById(projectId);
-        if (!project) {
-            return res.status(404).json({ message: "Project not found" });
-        }
+        const projectId = id;
+        const assignedUsers = [assignedUser]; // Convert single user to array
 
-        // Optional: Validate dates
-        if (new Date(startDate) > new Date(endDate)) {
-            return res.status(400).json({ message: "End date must be after start date" });
-        }
-
-        // Create and save the task
-        const newTask = new Task({
+        const newTask = await Task.create({
             taskTitle,
             taskDescription,
-            taskStatus: taskStatus || "To Do", // default fallback
+            taskStatus: status || "Pending",
             startDate: new Date(startDate),
             endDate: new Date(endDate),
             projectId,
-            assignedUser,
+            assignedUsers,
             createdBy: req.user.id,
         });
-
         const savedTask = await newTask.save();
-
-        console.log('no',req.body); 
-        // Update the related project with the task
-        await Project.findByIdAndUpdate(projectId, {
-            $push: { tasks: savedTask._id }
-        });
+        //console.log("Task saved successfully:", savedTask); // Debugging
 
         res.status(201).json(savedTask);
     } catch (error) {
-        console.error("Error creating task:", error);
-        res.status(500).json({ message: "Internal Server Error" });
+        //console.error("Error creating task:", error); //Debugging
+        res.status(500).json({ message: error.message });
     }
 };
 

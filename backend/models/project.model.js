@@ -76,7 +76,7 @@ const projectSchema = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId, 
             ref: "User" 
         }
-    ],
+    ], 
     tasks: [ // ✅ Added this block
         {
             type: mongoose.Schema.Types.ObjectId,
@@ -91,4 +91,7 @@ const projectSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 module.exports = mongoose.model("Project", projectSchema);
+
+
+
 
