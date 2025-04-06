@@ -1,3 +1,4 @@
+ 
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
@@ -26,7 +27,7 @@ const ProjectDetails = () => {
                 console.error("No authentication token found.");
                 return;
             }
-            console.log("Provide id:",id)
+            //console.log("Provide id:",id)
             const response = await axios.get(`http://localhost:5000/api/projects/${id}`, {
                 
                 headers: {
@@ -36,9 +37,9 @@ const ProjectDetails = () => {
              
             setProject(response.data);
             setTasks(response.data.tasks || []);
-            console.log("Project");
+            //console.log("Project");
         } catch (error) { 
-            console.log(response.data);
+            //console.log(response.data);
             console.error("Error fetching project details:", error);
         }
     };
