@@ -108,13 +108,11 @@ exports.getTaskById = async (req, res) => {
 // const Task = require("../models/Task");
 // const Project = require("../models/Project");
 
-exports.createTask = async (req, res) => { 
-    conlog.log('yes',req.body());
+exports.createTask = async (req, res) => {
     try {
-        //console.log("Request body:", req.body); // Debugging
-        const { taskTitle, taskDescription, taskStatus, startDate, endDate, projectId, assignedUsers } = req.body;
+        console.log("Request body:", req.body);
 
-        const newTask = await Task.create({
+        const {
             taskTitle,
             taskDescription,
             assignedUser,
@@ -135,14 +133,17 @@ exports.createTask = async (req, res) => {
             endDate: new Date(endDate),
             projectId,
             assignedUsers,
-            createdBy: req.user.id,
+            createdBy: req.user.id // Assumes user is authenticated
         });
-        const savedTask = await newTask.save();
-        //console.log("Task saved successfully:", savedTask); // Debugging
 
-        res.status(201).json(savedTask);
+        // Push task into Project.tasks
+        await Project.findByIdAndUpdate(projectId, {
+            $push: { tasks: newTask._id }
+        });
+
+        res.status(201).json(newTask);
     } catch (error) {
-        //console.error("Error creating task:", error); //Debugging
+        console.error("Error creating task:", error);
         res.status(500).json({ message: error.message });
     }
 };
